@@ -1,0 +1,56 @@
+Test run 2026-11-11 12:03:25  |  Python 3.14.7  |  macOS-26.5-arm64-arm-64bit-Mach-O
+==============================================================================
+PASS  test_stage1.Stage1Test.test_errors
+PASS  test_stage1.Stage1Test.test_filter
+PASS  test_stage1.Stage1Test.test_only_moderator_resolves
+PASS  test_stage1.Stage1Test.test_submit_and_get
+PASS  test_stage1.Stage1Test.test_update_bumps_version
+PASS  test_stage1.Stage1Test.test_wal_replay_after_restart
+PASS  test_stage2.Stage2Test.test_locks_are_per_record
+PASS  test_stage2.Stage2Test.test_many_threads_exactly_one_wins
+PASS  test_stage2.Stage2Test.test_missing_base_version_is_400
+PASS  test_stage2.Stage2Test.test_retry_after_409_succeeds
+PASS  test_stage2.Stage2Test.test_two_threads_one_gets_409
+PASS  test_stage2.Stage2Test.test_wal_has_no_duplicate_versions
+PASS  test_stage3.Stage3Test.test_409_is_relayed_through_follower
+PASS  test_stage3.Stage3Test.test_identical_logs_under_concurrent_writes
+PASS  test_stage3.Stage3Test.test_leader_down_follower_write_gives_503
+PASS  test_stage3.Stage3Test.test_no_majority_returns_503
+PASS  test_stage3.Stage3Test.test_one_follower_down_writes_still_succeed
+PASS  test_stage3.Stage3Test.test_write_on_follower_is_forwarded
+PASS  test_stage3.Stage3Test.test_write_on_leader_replicates_everywhere
+PASS  test_stage4.Stage4Test.test_acknowledged_write_survives_leader_crash
+PASS  test_stage4.Stage4Test.test_client_fails_over_and_writes_succeed
+PASS  test_stage4.Stage4Test.test_client_gives_up_when_everything_is_down
+PASS  test_stage4.Stage4Test.test_diverged_old_leader_is_resynced
+PASS  test_stage4.Stage4Test.test_follower_restart_replays_wal_then_catches_up
+PASS  test_stage4.Stage4Test.test_leader_failure_elects_lowest_live_node
+PASS  test_stage4.Stage4Test.test_old_leader_rejoins_as_follower_and_catches_up
+PASS  test_stage4.Stage4Test.test_stale_term_replication_is_refused
+PASS  test_stage5.EventBusTest.test_orders_out_of_order_publishes
+PASS  test_stage5.EventBusTest.test_slow_subscriber_is_dropped_not_blocking
+PASS  test_stage5.Stage5Test.test_events_arrive_in_seq_order_under_concurrent_writes
+PASS  test_stage5.Stage5Test.test_filters
+PASS  test_stage5.Stage5Test.test_html_page_and_nodes_endpoint
+PASS  test_stage5.Stage5Test.test_reconnect_replays_from_last_event_id
+PASS  test_stage5.Stage5Test.test_viewer_fails_over_when_its_node_dies_and_misses_nothing
+PASS  test_stage5.Stage5Test.test_viewer_on_follower_sees_writes_made_on_leader
+PASS  test_stage5.Stage5Test.test_write_via_follower_reaches_viewer_on_another_follower
+PASS  test_stage6.ClusterTest.test_history_is_the_same_on_every_node
+PASS  test_stage6.ClusterTest.test_request_id_dedups_through_any_node_and_after_failover
+PASS  test_stage6.SingleNodeTest.test_cors_preflight
+PASS  test_stage6.SingleNodeTest.test_fonts_are_served_and_nothing_else
+PASS  test_stage6.SingleNodeTest.test_history_lists_every_version
+PASS  test_stage6.SingleNodeTest.test_history_of_unknown_report_is_404
+PASS  test_stage6.SingleNodeTest.test_long_input_is_rejected
+PASS  test_stage6.SingleNodeTest.test_oversized_body_is_413
+PASS  test_stage6.SingleNodeTest.test_request_id_survives_restart
+PASS  test_stage6.SingleNodeTest.test_same_request_id_creates_one_report
+==============================================================================
+test_stage1    6/6 passed
+test_stage2    6/6 passed
+test_stage3    7/7 passed
+test_stage4    8/8 passed
+test_stage5    9/9 passed
+test_stage6    10/10 passed
+TOTAL          46/46 passed in 41.9s

@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "date": "2026-11-10 22:39",
+    "python": "3.14.7",
+    "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+    "cpus": 8,
+    "note": "load generator and all 3 nodes share one machine; use numbers comparatively"
+  },
+  "runs": [
+    {
+      "clients": 10,
+      "duration_s": 15.0,
+      "requests": 70236,
+      "throughput_rps": 4680.8,
+      "success_rate_pct": 100.0,
+      "ok_pct": 97.48,
+      "conflict_409_pct": 2.52,
+      "errors": 0,
+      "avg_ms": 2.13,
+      "p50_ms": 0.49,
+      "p95_ms": 9.56,
+      "p99_ms": 17.09,
+      "max_ms": 49.71,
+      "by_kind": {
+        "read": {
+          "count": 45915,
+          "avg_ms": 0.5,
+          "p50_ms": 0.31,
+          "p95_ms": 1.25,
+          "p99_ms": 4.42,
+          "max_ms": 33.2
+        },
+        "list": {
+          "count": 6010,
+          "avg_ms": 2.84,
+          "p50_ms": 2.3,
+          "p95_ms": 6.18,
+          "p99_ms": 10.8,
+          "max_ms": 33.75
+        },
+        "submit": {
+          "count": 9154,
+          "avg_ms": 9.08,
+          "p50_ms": 7.67,
+          "p95_ms": 18.83,
+          "p99_ms": 27.35,
+          "max_ms": 49.71
+        },
+        "update": {
+          "count": 9157,
+          "avg_ms": 2.94,
+          "p50_ms": 1.99,
+          "p95_ms": 7.93,
+          "p99_ms": 13.02,
+          "max_ms": 43.53
+        }
+      },
+      "client_retries": 0,
+      "retry_reasons": {},
+      "acked_writes": 16541,
+      "wal_seq_after": 16549,
+      "wal_extra_entries": 0,
+      "nodes_consistent": true,
+      "wal_equals_acked_writes": true
+    },
+    {
+      "clients": 50,
+      "duration_s": 15.0,
+      "requests": 71719,
+      "throughput_rps": 4774.6,
+      "success_rate_pct": 100.0,
+      "ok_pct": 96.48,
+      "conflict_409_pct": 3.52,
+      "errors": 0,
+      "avg_ms": 10.45,
+      "p50_ms": 0.62,
+      "p95_ms": 76.01,
+      "p99_ms": 115.6,
+      "max_ms": 191.5,
+      "by_kind": {
+        "read": {
+          "count": 47068,
+          "avg_ms": 0.73,
+          "p50_ms": 0.36,
+          "p95_ms": 3.0,
+          "p99_ms": 6.12,
+          "max_ms": 33.69
+        },
+        "list": {
+          "count": 6145,
+          "avg_ms": 3.11,
+          "p50_ms": 2.49,
+          "p95_ms": 6.88,
+          "p99_ms": 14.17,
+          "max_ms": 34.29
+        },
+        "submit": {
+          "count": 9120,
+          "avg_ms": 72.77,
+          "p50_ms": 68.41,
+          "p95_ms": 125.47,
+          "p99_ms": 148.54,
+          "max_ms": 191.5
+        },
+        "update": {
+          "count": 9386,
+          "avg_ms": 3.44,
+          "p50_ms": 2.27,
+          "p95_ms": 9.72,
+          "p99_ms": 16.35,
+          "max_ms": 34.84
+        }
+      },
+      "client_retries": 0,
+      "retry_reasons": {},
+      "acked_writes": 15984,
+      "wal_seq_after": 15992,
+      "wal_extra_entries": 0,
+      "nodes_consistent": true,
+      "wal_equals_acked_writes": true
+    },
+    {
+      "clients": 100,
+      "duration_s": 15.0,
+      "requests": 64711,
+      "throughput_rps": 4301.6,
+      "success_rate_pct": 100.0,
+      "ok_pct": 96.28,
+      "conflict_409_pct": 3.72,
+      "errors": 0,
+      "avg_ms": 23.1,
+      "p50_ms": 0.75,
+      "p95_ms": 186.87,
+      "p99_ms": 261.76,
+      "max_ms": 322.83,
+      "by_kind": {
+        "read": {
+          "count": 42227,
+          "avg_ms": 0.93,
+          "p50_ms": 0.42,
+          "p95_ms": 3.89,
+          "p99_ms": 7.95,
+          "max_ms": 40.06
+        },
+        "list": {
+          "count": 5697,
+          "avg_ms": 3.37,
+          "p50_ms": 2.74,
+          "p95_ms": 8.11,
+          "p99_ms": 16.03,
+          "max_ms": 43.5
+        },
+        "submit": {
+          "count": 8339,
+          "avg_ms": 168.31,
+          "p50_ms": 163.31,
+          "p95_ms": 273.32,
+          "p99_ms": 298.44,
+          "max_ms": 322.83
+        },
+        "update": {
+          "count": 8448,
+          "avg_ms": 3.88,
+          "p50_ms": 2.56,
+          "p95_ms": 10.4,
+          "p99_ms": 19.4,
+          "max_ms": 47.49
+        }
+      },
+      "client_retries": 0,
+      "retry_reasons": {},
+      "acked_writes": 14377,
+      "wal_seq_after": 14385,
+      "wal_extra_entries": 0,
+      "nodes_consistent": true,
+      "wal_equals_acked_writes": true
+    }
+  ]
+}

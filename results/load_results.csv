@@ -1,0 +1,4 @@
+clients,requests,throughput_rps,avg_ms,p50_ms,p95_ms,p99_ms,max_ms,success_rate_pct,conflict_409_pct,errors,nodes_consistent,wal_equals_acked_writes
+10,70236,4680.8,2.13,0.49,9.56,17.09,49.71,100.0,2.52,0,True,True
+50,71719,4774.6,10.45,0.62,76.01,115.6,191.5,100.0,3.52,0,True,True
+100,64711,4301.6,23.1,0.75,186.87,261.76,322.83,100.0,3.72,0,True,True

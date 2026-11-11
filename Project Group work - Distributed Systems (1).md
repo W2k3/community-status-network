@@ -1,0 +1,13 @@
+
+
+**distributed system.** In your respective **groups**, you are required to select a real-world distributed systems problem of your choice and in your development team commissioned, you are required to build a small distributed application for a community, company or organization of your choice. The service must allow multiple clients to submit, retrieve, and update records through networked processes. The system should continue to provide useful service when a server process fails or the network connection between components becomes slow or temporarily unavailable. Choose one context and develop a working prototype that demonstrates distributed-system principles. **Your prototype and project report must address the following tasks:**
+
+a) Requirements and architecture: identify the users, distributed processes, hardware/software components, communication links, and at least three functional requirements. Draw and explain a labelled architecture diagram.
+b) Implementation: build a working client-server or service-based prototype with at least two communicating processes or clients. Demonstrate a suitable communication mechanism (for example, sockets, HTTP/REST, or remote procedure call) and show how data is exchanged.
+c) Coordination and consistency: demonstrate how concurrent requests or shared data are handled. Implement or clearly simulate a suitable
+
+synchronization/locking strategy and explain how conflicting updates are prevented or resolved.
+
+d) Fault handling and reliability: demonstrate at least one failure scenario, such as a server restart, dropped connection, timeout, or unavailable service. Show the recovery or error-handling behavior and explain the limits of your solution.
+e) Performance and scalability evaluation: run at least two test cases using different numbers of requests or clients. Report measurable results such as response time, throughput, successful requests, or failure recovery time, and interpret the results.
+f) Demonstration and technical report: submit source code, setup/run instructions, test evidence (screenshots, logs, or tables), a concise report, and a short live demonstration or recorded walkthrough video (*maximum 15* *minutes*) showing each member’s contribution. **Submission requirements:** ✓ One project submission per group of two students. ✓ Include the architecture diagram, source code, test cases/results, and a report of approximately 5–8 pages. ✓ The project should be runnable on a standard laptop or clearly explain any setup requirements. ✓ A short live demonstration or recorded walkthrough video (*maximum 15* *minutes*) showing each member’s contribution. 

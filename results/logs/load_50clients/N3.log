@@ -1,0 +1,12 @@
+[N3] listening on 127.0.0.1:56473; replayed WAL up to seq 0
+[N3] leader is now N1 (term 1)
+[N3] caught up: applied 2 entries, now at seq 5533
+[N3] caught up: applied 1 entries, now at seq 6249
+[N3] caught up: applied 14 entries, now at seq 8040
+[N3] caught up: applied 28 entries, now at seq 11088
+[N3] caught up: applied 16 entries, now at seq 11520
+[N3] caught up: applied 2 entries, now at seq 13246
+[N3] caught up: applied 12 entries, now at seq 13678
+[N3] caught up: applied 7 entries, now at seq 14369
+[N3] caught up: applied 3 entries, now at seq 15085
+[N3] caught up: applied 13 entries, now at seq 15381

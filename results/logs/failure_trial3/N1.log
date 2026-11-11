@@ -1,0 +1,5 @@
+[N1] listening on 127.0.0.1:60666; replayed WAL up to seq 0
+[N1] leader is now N1 (term 1)  <-- I AM THE LEADER
+[N1] listening on 127.0.0.1:60666; replayed WAL up to seq 581
+[N1] leader is now N2 (term 2)
+[N1] caught up: applied 1181 entries, now at seq 1762

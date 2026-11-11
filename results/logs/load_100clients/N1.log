@@ -1,0 +1,2 @@
+[N1] listening on 127.0.0.1:56694; replayed WAL up to seq 0
+[N1] leader is now N1 (term 1)  <-- I AM THE LEADER

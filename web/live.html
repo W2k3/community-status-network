@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Community Status</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='7' fill='%230E5A45'/%3E%3Ccircle cx='14' cy='14' r='3' fill='%23fff'/%3E%3Cpath d='M8 8a8.5 8.5 0 0 0 0 12M20 8a8.5 8.5 0 0 1 0 12' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+  /* Fonts are served by the node itself (web/fonts), so the page works on a LAN with no internet. */
+  @font-face { font-family: "Inter"; src: url("/fonts/inter.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+  @font-face { font-family: "Space Grotesk"; src: url("/fonts/space-grotesk.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
+  @font-face { font-family: "JetBrains Mono"; src: url("/fonts/jetbrains-mono.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+
+  :root {
+    --ground: #F4F5F2; --surface: #FFFFFF; --sunken: #F0F2EE; --ink: #16201C; --ink-2: #3D4A45;
+    --muted: #56615C; --line: #DFE3DD; --line-soft: #ECEFEA; --line-strong: #CDD3CC;
+    --accent: #0E5A45; --accent-hover: #0A4837; --on-accent: #FFFFFF; --accent-soft: #E9F3EE;
+    --accent-line: #BFDACD; --accent-ink: #0B4A39; --fresh: #F1F8F4;
+    --open-bg: #FFE8CC; --open-ink: #8A4300; --verified-bg: #DCE8FF; --verified-ink: #1B4FB8;
+    --resolved-bg: #E6EAE7; --resolved-ink: #3D4A45;
+    --warn-bg: #FFF4E3; --warn-ink: #6B3400; --warn-line: #C98A3C; --bad: #A32020;
+    --inv-bg: #16201C; --inv-ink: #FFFFFF; --seg: #E7EAE5; --shadow: 0 1px 2px rgba(22,32,28,.12);
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #111613; --surface: #1A211D; --sunken: #232B27; --ink: #E8ECE9; --ink-2: #C3CCC7;
+      --muted: #9BA8A1; --line: #2A332E; --line-soft: #242C28; --line-strong: #3A453F;
+      --accent: #3FB58F; --accent-hover: #55C7A2; --on-accent: #06231A; --accent-soft: #17322A;
+      --accent-line: #245244; --accent-ink: #8FE0C2; --fresh: #172620;
+      --open-bg: #3A2A10; --open-ink: #F5B969; --verified-bg: #172A4D; --verified-ink: #9CC0FF;
+      --resolved-bg: #262E2A; --resolved-ink: #B5C0BA;
+      --warn-bg: #33260F; --warn-ink: #F5C98A; --warn-line: #8A6A33; --bad: #FF8A8A;
+      --inv-bg: #E8ECE9; --inv-ink: #111613; --seg: #232B27; --shadow: 0 1px 2px rgba(0,0,0,.5);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 15px/1.45 var(--font);
+         -webkit-font-smoothing: antialiased; }
+  button, input, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  button:disabled { cursor: default; opacity: .6; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  h1, h2, p { margin: 0; }
+  .mono { font-family: var(--mono); }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  [hidden] { display: none !important; }
+
+  /* ---- header ---- */
+  header.top { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  .top-in { max-width: 1360px; margin: 0 auto; padding: 12px 32px; display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; flex: 1 1 auto; min-width: 0;
+           font: 600 18px var(--display); white-space: nowrap; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 22px;
+          font-size: 14px; font-weight: 500; white-space: nowrap;
+          background: var(--accent-soft); color: var(--accent-ink); border: 1px solid var(--accent-line); }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .pill.off { background: var(--warn-bg); color: var(--warn-ink); border-color: var(--warn-line); }
+  .pill.off .dot { background: var(--warn-line); animation: pulse 1s infinite alternate; }
+  @keyframes pulse { to { opacity: .3; } }
+  .who { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px 0 6px; border-radius: 22px;
+         background: var(--surface); border: 1px solid var(--line); font-size: 14px; white-space: nowrap; }
+  .who:hover { border-color: var(--line-strong); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--inv-bg); color: var(--inv-ink);
+            display: inline-flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px;
+         border-radius: 10px; border: 1px solid var(--line-strong); background: var(--surface); font-weight: 500; }
+  .btn:hover:not(:disabled) { border-color: var(--muted); }
+  .btn.primary { background: var(--accent); color: var(--on-accent); border-color: transparent; font-weight: 600; }
+  .btn.primary:hover:not(:disabled) { background: var(--accent-hover); }
+  .btn.big { min-height: 48px; }
+  .btn.block { width: 100%; }
+  .iconbtn { width: 44px; height: 44px; border: 0; border-radius: 10px; background: transparent; color: var(--ink-2);
+             display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .iconbtn:hover { background: var(--sunken); }
+
+  /* ---- failover banner ---- */
+  .banner { max-width: 1296px; margin: 16px auto 0; padding: 12px 14px; background: var(--inv-bg); color: var(--inv-ink);
+            border-radius: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+  .banner-wrap { padding: 0 32px; }
+  .banner .iconbtn { width: 28px; height: 28px; margin: -4px -6px 0 0; color: inherit; }
+  .banner .iconbtn:hover { background: transparent; opacity: .7; }
+
+  /* ---- layout ---- */
+  .page { max-width: 1360px; margin: 0 auto; padding: 28px 32px 48px; display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+  main { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  aside { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+  .title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+  .title h1 { font: 600 28px var(--display); letter-spacing: -.01em; }
+  .filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .seg { display: flex; background: var(--seg); border-radius: 10px; padding: 3px; gap: 2px; }
+  .seg button { min-height: 38px; padding: 0 14px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-2);
+                font-weight: 500; font-size: 14px; white-space: nowrap; }
+  .seg button span { color: var(--muted); font-weight: 500; }
+  .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); font-weight: 600; box-shadow: var(--shadow); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { min-height: 40px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 20px; background: var(--surface); font-size: 14px; }
+  .chip[aria-pressed="true"] { background: var(--inv-bg); color: var(--inv-ink); border-color: var(--inv-bg); font-weight: 500; }
+  .search { flex: 1 1 200px; display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 12px;
+            background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px; color: var(--muted); }
+  .search:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 14px; color: var(--ink); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .row { width: 100%; display: flex; align-items: center; gap: 16px; padding: 14px 18px; border: 0;
+         border-bottom: 1px solid var(--line-soft); background: var(--surface); text-align: left; transition: background .6s; }
+  .row:last-child { border-bottom: 0; }
+  .row:hover { background: var(--sunken); transition: none; }
+  .row.fresh { background: var(--fresh); }
+  .tile { flex: none; width: 44px; height: 44px; border-radius: 12px; background: var(--sunken);
+          display: flex; align-items: center; justify-content: center; }
+  .row.fresh .tile { background: var(--surface); }
+  .row .text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .row .desc { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row .fresh-tag { flex: none; font-size: 12px; font-weight: 600; color: var(--accent-ink); }
+  .row .ref { flex: none; min-width: 64px; text-align: right; font: 12px var(--mono); color: var(--muted); }
+  .badge { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 3px 11px; border-radius: 99px;
+           font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .badge.open { background: var(--open-bg); color: var(--open-ink); }
+  .badge.verified { background: var(--verified-bg); color: var(--verified-ink); }
+  .badge.resolved { background: var(--resolved-bg); color: var(--resolved-ink); padding-left: 8px; }
+  .empty { padding: 40px 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .empty strong { font: 600 17px var(--display); }
+
+  /* ---- side cards ---- */
+  .side { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .side-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  h2 { font: 600 16px var(--display); }
+  .nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .node { border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .node.leader { border: 1.5px solid var(--accent); }
+  .node.here { background: var(--ground); }
+  .node.down { border-style: dashed; }
+  .node.down > * { opacity: .75; }
+  .node .name { font: 500 15px var(--mono); }
+  .node .role { font-size: 12px; font-weight: 600; color: var(--ink-2); }
+  .node.leader .role { color: var(--accent-ink); }
+  .node.down .role { color: var(--bad); }
+  .node .seq { font: 12px var(--mono); color: var(--muted); }
+  .node .seq.lag { color: var(--open-ink); }
+  .act-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 12px; }
+  .act { display: flex; gap: 12px; padding: 10px 18px; border-top: 1px solid var(--line-soft); }
+  .act .t { flex: none; min-width: 44px; white-space: nowrap; font: 12px var(--mono); color: var(--muted); padding-top: 2px; }
+  .act .b { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; font-size: 14px; overflow-wrap: anywhere; }
+  .act .b .id { font: 500 13px var(--mono); }
+  #log { max-height: 420px; overflow-y: auto; }
+
+  /* ---- dialogs ---- */
+  dialog { border: 0; padding: 0; color: var(--ink); background: var(--surface); border-radius: 16px;
+           width: min(480px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); box-shadow: 0 24px 64px rgba(0,0,0,.28); }
+  dialog::backdrop { background: rgba(14,20,17,.5); }
+  dialog.drawer { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; border-radius: 0; width: min(480px, 100vw);
+                  border-left: 1px solid var(--line); }
+  dialog[open] { display: flex; flex-direction: column; }
+  .dlg-head { display: flex; align-items: center; gap: 12px; padding: 10px 8px 10px 24px; border-bottom: 1px solid var(--line-soft); flex: none; }
+  .dlg-head h1 { flex: 1; font: 600 20px var(--display); }
+  .dlg-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; flex: 1; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label, legend { font-weight: 600; font-size: 14px; padding: 0; }
+  fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+  legend { margin-bottom: 8px; }
+  .input { min-height: 48px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 10px; font-size: 16px;
+           background: var(--surface); width: 100%; }
+  textarea.input { padding: 12px 14px; resize: vertical; min-height: 110px; line-height: 1.45; }
+  .input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .field .hint { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; }
+  .field .err { font-size: 13px; color: var(--bad); font-weight: 500; }
+  .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tiles button { min-height: 64px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border: 1px solid var(--line-strong);
+                  border-radius: 12px; background: var(--surface); font-weight: 500; }
+  .tiles button[aria-pressed="true"] { border: 2px solid var(--accent); background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; padding: 0 13px; }
+  .notice { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--warn-bg); color: var(--warn-ink);
+            border-radius: 10px; font-size: 13px; }
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+  /* drawer */
+  .d-title { font: 600 22px/1.25 var(--display); letter-spacing: -.01em; overflow-wrap: anywhere; }
+  .stepper { display: flex; align-items: center; gap: 8px; }
+  .step { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+  .step .o { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+             border: 2px solid var(--line-strong); }
+  .step.done { color: var(--ink-2); font-weight: 600; }
+  .step.done .o { background: var(--inv-bg); color: var(--inv-ink); border-color: var(--inv-bg); }
+  .step.now { padding: 4px 12px 4px 5px; border-radius: 99px; font-weight: 600; }
+  .step.now.open { background: var(--open-bg); color: var(--open-ink); }
+  .step.now.verified { background: var(--verified-bg); color: var(--verified-ink); }
+  .step.now.resolved { background: var(--resolved-bg); color: var(--resolved-ink); }
+  .step.now .o { background: currentColor; border-color: transparent; }
+  .step.now .o svg { color: var(--surface); }
+  .bar { flex: 1; height: 2px; background: var(--line); min-width: 12px; }
+  .bar.done { background: var(--inv-bg); }
+  .hist { display: flex; gap: 14px; }
+  .hist .v { flex: none; width: 36px; height: 24px; border-radius: 6px; background: var(--sunken); color: var(--ink-2);
+             font: 500 12px var(--mono); display: flex; align-items: center; justify-content: center; }
+  .hist:first-of-type .v { background: var(--verified-bg); color: var(--verified-ink); }
+  .hist .b { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+  .was { font-size: 13px; color: var(--muted); padding: 8px 12px; background: var(--ground); border-radius: 8px; }
+
+  /* conflict */
+  .c-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--open-bg); color: var(--open-ink);
+            display: flex; align-items: center; justify-content: center; }
+  .c-card { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; overflow-wrap: anywhere; }
+  .c-card.mine { border: 1.5px dashed var(--warn-line); background: var(--warn-bg); }
+  .c-card .h { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .c-card.mine .h { color: var(--warn-ink); }
+
+  /* toast + mobile bar */
+  #toasts { position: fixed; left: 0; right: 0; bottom: 24px; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            pointer-events: none; z-index: 2147483647; padding: 0 16px; }
+  .toast { background: var(--inv-bg); color: var(--inv-ink); padding: 12px 16px; border-radius: 12px; font-size: 14px; font-weight: 500;
+           max-width: 440px; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+  .toast.warn { background: var(--warn-bg); color: var(--warn-ink); border: 1px solid var(--warn-line); }
+  .mbar { display: none; }
+
+  @media (max-width: 720px) {
+    .top-in { padding: 10px 16px; gap: 8px; }
+    .brand { font-size: 17px; }
+    .who { padding: 0 6px; border: 0; background: transparent; }
+    .who .who-text, #btnReport, .pill .via-word { display: none; }
+    .page { padding: 16px 16px 112px; gap: 20px; }
+    .banner-wrap { padding: 0 16px; }
+    .title h1 { font-size: 24px; }
+    .filters { gap: 10px; }
+    .seg { width: 100%; }
+    .seg button { flex: 1; padding: 0 6px; min-height: 44px; }
+    .chips { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 2px; scrollbar-width: none; }
+    .chip { flex: none; min-height: 44px; }
+    .search { flex-basis: 100%; min-height: 44px; }
+    .search input { font-size: 16px; }
+    .row { align-items: flex-start; gap: 12px; padding: 14px; }
+    .row .desc { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .row .ref, .row .fresh-tag { display: none; }
+    .mbar { display: block; position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+            background: linear-gradient(to top, var(--ground) 70%, transparent); z-index: 4; }
+    .mbar .btn { min-height: 52px; border-radius: 14px; font-size: 16px; }
+    #toasts { bottom: 92px; }
+    dialog:not(.drawer) { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; margin: 0; }
+    .dlg-head { padding-left: 20px; }
+    .dlg-body { padding: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="var(--accent)"/><circle cx="14" cy="14" r="3" fill="var(--on-accent)"/><path d="M8 8a8.5 8.5 0 0 0 0 12M20 8a8.5 8.5 0 0 1 0 12" fill="none" stroke="var(--on-accent)" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Community Status</span>
+    </div>
+    <div id="live" class="pill off" role="status"><span class="dot"></span><span id="liveText">Connecting…</span></div>
+    <button id="btnWho" class="who" type="button" aria-label="Your name and role">
+      <span id="whoAvatar" class="avatar">?</span>
+      <span class="who-text"><strong id="whoName" style="font-weight:500">Set your name</strong> <span id="whoRole" class="muted"></span></span>
+    </button>
+    <button id="btnReport" class="btn primary" type="button"></button>
+  </div>
+</header>
+
+<div class="banner-wrap"><div id="banner" class="banner" role="status" hidden></div></div>
+
+<div class="page">
+  <main>
+    <div class="title"><h1>Reports</h1><span id="summary" class="muted"></span></div>
+    <div class="filters">
+      <div id="tabs" class="seg" role="group" aria-label="Filter by status"></div>
+      <div id="chips" class="chips" role="group" aria-label="Filter by type"></div>
+      <label class="search">
+        <span id="searchIcon" style="display:flex"></span>
+        <input id="fLoc" type="search" placeholder="Filter by location" aria-label="Filter by location" autocomplete="off">
+      </label>
+    </div>
+    <div id="list" class="card" aria-live="off"></div>
+  </main>
+
+  <aside>
+    <section class="card side" aria-labelledby="hCluster">
+      <div class="side-head"><h2 id="hCluster">Cluster</h2><span id="term" class="mono small muted"></span></div>
+      <div id="nodes" class="nodes"></div>
+      <p id="clusterNote" class="small muted">Checking the nodes…</p>
+    </section>
+    <section class="card" aria-labelledby="hAct">
+      <div class="act-head"><h2 id="hAct">Live activity</h2><span class="muted" style="font-size:12px">newest first</span></div>
+      <div id="log"></div>
+      <p id="logEmpty" class="small muted" style="padding: 0 18px 18px">Changes show up here the moment they happen.</p>
+    </section>
+  </aside>
+</div>
+
+<div class="mbar"><button id="btnReportM" class="btn primary block" type="button"></button></div>
+
+<!-- Report an issue -->
+<dialog id="dlgSubmit" aria-labelledby="hSubmit">
+  <div class="dlg-head"><h1 id="hSubmit">Report an issue</h1><button class="iconbtn" data-close type="button" aria-label="Close"></button></div>
+  <form id="formSubmit" class="dlg-body" novalidate>
+    <fieldset>
+      <legend>What is the problem?</legend>
+      <div id="typeTiles" class="tiles"></div>
+      <div id="errType" class="err" hidden style="font-size:13px;color:var(--bad);font-weight:500;margin-top:6px">Pick the kind of problem.</div>
+    </fieldset>
+    <div class="field">
+      <label for="inLoc">Where?</label>
+      <input id="inLoc" class="input" type="text" maxlength="120" placeholder="Area, street or landmark" autocomplete="off">
+      <span id="errLoc" class="err" hidden>Say where the problem is.</span>
+    </div>
+    <div class="field">
+      <label for="inDesc">What is happening?</label>
+      <textarea id="inDesc" class="input" rows="4" maxlength="500"></textarea>
+      <span id="errDesc" class="err" hidden>Describe what is happening.</span>
+      <span class="hint"><span>One or two sentences. You can edit it afterwards.</span><span id="descCount" class="mono">0/500</span></span>
+    </div>
+    <div class="field">
+      <label for="inName">Your name</label>
+      <input id="inName" class="input" type="text" maxlength="40" autocomplete="name">
+      <span id="errName" class="err" hidden>Add your name so neighbours know who reported it.</span>
+      <span class="hint"><span>Shown next to the report. Remembered on this device.</span></span>
+    </div>
+    <div class="stack" style="margin-top:auto">
+      <div id="submitNotice" class="notice" hidden></div>
+      <button id="btnPost" class="btn primary big block" type="submit">Post report</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Report detail -->
+<dialog id="dlgDrawer" class="drawer" aria-label="Report details">
+  <div class="dlg-head" id="drawerHead"></div>
+  <div class="dlg-body" id="drawerBody" style="gap:24px"></div>
+</dialog>
+
+<!-- Edit conflict (HTTP 409) -->
+<dialog id="dlgConflict" aria-labelledby="hConflict">
+  <div class="dlg-body" id="conflictBody" style="padding:28px"></div>
+</dialog>
+
+<!-- Name and role -->
+<dialog id="dlgWho" aria-labelledby="hWho">
+  <div class="dlg-head"><h1 id="hWho">Who is using this device?</h1><button class="iconbtn" data-close type="button" aria-label="Close"></button></div>
+  <form id="formWho" class="dlg-body" novalidate>
+    <div class="field">
+      <label for="whoIn">Your name</label>
+      <input id="whoIn" class="input" type="text" maxlength="40" autocomplete="name">
+      <span id="errWho" class="err" hidden>Add a name to continue.</span>
+    </div>
+    <fieldset>
+      <legend>I am a</legend>
+      <div id="roleSeg" class="seg" role="group"></div>
+      <p class="small muted" style="margin-top:10px">Residents report and edit. Moderators can also verify and resolve. This network has no login, so the role is whatever you choose here.</p>
+    </fieldset>
+    <button class="btn primary big block" type="submit" style="margin-top:auto">Save</button>
+  </form>
+</dialog>
+
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+"use strict";
+// ---------------------------------------------------------------------------
+// Community Status web client: read, submit, edit, verify and resolve reports.
+//
+// * Live feed: EventSource (Server-Sent Events) against /events. The browser's built-in retry
+//   would stick to the SAME node forever, so on any error we close the stream and fail over to
+//   the next node ourselves, resuming from the last event id (the WAL seq) so nothing is missed.
+//   Every (re)connect also reloads the full list from /reports.
+// * Writes: api() mirrors csn/client.py: per-request timeout, up to 8 attempts, exponential
+//   backoff with jitter, next node on network errors and 502/503/504. 400/404/409 are answers.
+//   Submits carry a request_id so a retried submit can never create a duplicate report.
+// * Conflicts: every edit sends base_version. A 409 opens a dialog showing the latest version next
+//   to the unsaved edit; nothing is overwritten silently.
+// * All user-supplied text goes in through textContent / text nodes (never innerHTML).
+// ---------------------------------------------------------------------------
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const TYPES = { power: "Power", water: "Water", road: "Road", other: "Other" };
+const STATUSES = { open: "Open", verified: "Verified", resolved: "Resolved" };
+const ORDER = ["open", "verified", "resolved"];
+
+// Icon shapes are constants written here (never user data), so innerHTML is safe for them.
+const ICONS = {
+  power: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>',
+  water: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  road: '<path d="M8 3 4 21M16 3l4 18M12 5v3M12 11v3M12 17v3"/>',
+  other: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/>',
+  check: '<path d="m5 12 5 5 9-10"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  swap: '<path d="M4 7h10l-3-3M20 17H10l3 3"/>',
+  sync: '<path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+};
+function icon(name, size = 22, width = 1.8) {
+  const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  for (const [k, v] of Object.entries({ width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor",
+    "stroke-width": width, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" })) s.setAttribute(k, v);
+  s.style.flex = "none";
+  s.innerHTML = ICONS[name] || ICONS.other;
+  return s;
+}
+// Tiny element builder. Strings become text nodes, so user text can never turn into markup.
+function h(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? "" : v);
+  }
+  e.append(...kids.flat().filter(k => k != null && k !== false));
+  return e;
+}
+
+// ---- state ----------------------------------------------------------------
+const reports = new Map();              // id -> newest version seen
+const fresh = new Map();                // id -> time it last changed (drives the "Just updated" tag)
+let nodes = [{ id: "", url: location.origin }];
+let idx = 0, lastId = null, es = null, failures = 0, lostFrom = null;
+const health = {};                      // node id -> /health body, or null when unreachable
+const filters = { status: "", type: "", loc: "" };
+let openId = null, history = null, editing = false, busy = false;
+let me = { name: "", role: "resident" };
+try { me = Object.assign(me, JSON.parse(localStorage.getItem("csn.me") || "{}")); } catch (e) { /* private mode */ }
+function saveMe() { try { localStorage.setItem("csn.me", JSON.stringify(me)); } catch (e) { /* ignore */ } renderWho(); }
+
+// ---- small helpers --------------------------------------------------------
+function ago(ts) {
+  const s = Date.now() / 1000 - ts;
+  if (s < 45) return "just now";
+  if (s < 3600) return Math.max(1, Math.round(s / 60)) + " min ago";
+  if (s < 86400) return Math.round(s / 3600) + " h ago";
+  return new Date(ts * 1000).toLocaleDateString([], { day: "numeric", month: "short" });
+}
+function clock(ts) {
+  const d = new Date(ts * 1000), t = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return d.toDateString() === new Date().toDateString() ? t : d.toLocaleDateString([], { day: "numeric", month: "short" }) + ", " + t;
+}
+function badge(status) {
+  return h("span", { class: "badge " + status }, status === "resolved" && icon("check", 14, 2.6), STATUSES[status] || status);
+}
+function uuid() {                        // crypto.randomUUID needs HTTPS or localhost; a LAN address has neither
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+let toastTimer = null;
+function toast(text, kind, sticky) {
+  const box = $("toasts"); box.textContent = ""; clearTimeout(toastTimer);
+  if (!text) return;
+  box.append(h("div", { class: "toast " + (kind || "") }, text));
+  if (!sticky) toastTimer = setTimeout(() => { box.textContent = ""; }, 4000);
+}
+function upsert(r) {
+  const old = reports.get(r.id);
+  if (old && old.version >= r.version) return false;
+  reports.set(r.id, r);
+  return true;
+}
+
+// ---- API with timeout, retry, backoff and failover -------------------------
+async function api(method, path, body, onRetry) {
+  let i = idx, last = "unreachable";
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 6000);
+    try {
+      const res = await fetch(nodes[i].url + path, { method, signal: ctl.signal,
+        headers: body ? { "Content-Type": "application/json" } : undefined, body: body ? JSON.stringify(body) : undefined });
+      const data = await res.json().catch(() => ({}));
+      if (![502, 503, 504].includes(res.status)) return { status: res.status, data };
+      last = data.error || "unavailable";
+    } catch (e) { last = "unreachable"; } finally { clearTimeout(timer); }
+    i = (i + 1) % nodes.length;          // fail over to the next node
+    if (attempt < 7) {
+      if (onRetry) onRetry(attempt + 1);
+      await sleep(Math.min(2000, 250 * 2 ** attempt) * (0.8 + Math.random() * 0.4));
+    }
+  }
+  throw new Error(last);
+}
+const SWITCHING = "The network is switching servers. This will go through by itself in a few seconds.";
+
+// ---- header ---------------------------------------------------------------
+function renderWho() {
+  $("whoAvatar").textContent = me.name ? me.name[0].toUpperCase() : "?";
+  $("whoName").textContent = me.name || "Set your name";
+  $("whoRole").textContent = me.name ? (me.role === "moderator" ? "Moderator" : "Resident") : "";
+}
+function setLive(on) {
+  $("live").className = "pill" + (on ? "" : " off");
+  const t = $("liveText"); t.textContent = "";
+  if (on) t.append("Live ", h("span", { class: "mono", style: "font-size:13px" }, h("span", { class: "via-word" }, "via "), nodes[idx].id));
+  else t.append("Reconnecting…");
+}
+function showBanner(to, from, replayed) {
+  const b = $("banner"); b.textContent = "";
+  const tail = replayed ? `You missed nothing: ${replayed} update${replayed === 1 ? " was" : "s were"} replayed.` : "You missed nothing.";
+  b.append(icon("sync", 20, 2), h("span", { style: "flex:1" }, h("strong", {}, `Reconnected through ${to}. `), `${from} stopped responding. ${tail}`),
+    h("button", { class: "iconbtn", type: "button", "aria-label": "Dismiss", onclick: () => { b.hidden = true; } }, icon("close", 16, 2)));
+  b.hidden = false;
+}
+
+// ---- report list ----------------------------------------------------------
+function visible(ignoreStatus) {
+  const loc = filters.loc.trim().toLowerCase();
+  return [...reports.values()].filter(r => (!filters.type || r.type === filters.type)
+    && (!loc || r.location.toLowerCase().includes(loc)) && (ignoreStatus || !filters.status || r.status === filters.status));
+}
+function renderFilters() {
+  const pool = visible(true), count = s => pool.filter(r => r.status === s).length;
+  const tabs = $("tabs"); tabs.textContent = "";
+  for (const [val, label, n] of [["", "All", pool.length], ...ORDER.map(s => [s, STATUSES[s], count(s)])])
+    tabs.append(h("button", { type: "button", "aria-pressed": String(filters.status === val),
+      onclick: () => { filters.status = val; render(); } }, label + " ", h("span", {}, String(n))));
+  const chips = $("chips"); chips.textContent = "";
+  for (const [val, label] of [["", "All types"], ...Object.entries(TYPES)])
+    chips.append(h("button", { class: "chip", type: "button", "aria-pressed": String(filters.type === val),
+      onclick: () => { filters.type = val; render(); } }, label));
+}
+function render() {
+  renderFilters();
+  const all = [...reports.values()], n = s => all.filter(r => r.status === s).length;
+  $("summary").textContent = all.length ? `${n("open")} open, ${n("verified")} waiting to be resolved` : "";
+  const list = $("list"); list.textContent = "";
+  const rows = visible(false).sort((a, b) => b.updated_at - a.updated_at);
+  const now = Date.now();
+  for (const r of rows) {
+    const isFresh = now - (fresh.get(r.id) || 0) < 8000;
+    list.append(h("button", { class: "row" + (isFresh ? " fresh" : ""), type: "button", onclick: () => openDrawer(r.id) },
+      h("span", { class: "tile" }, icon(r.type)),
+      h("span", { class: "text" },
+        h("span", { class: "desc" }, r.description),
+        h("span", { class: "muted small" }, `${r.location} · ${TYPES[r.type] || r.type} · ${r.updated_by} · ${ago(r.updated_at)}`)),
+      isFresh && h("span", { class: "fresh-tag" }, "Just updated"),
+      badge(r.status),
+      h("span", { class: "ref" }, `${r.id} · v${r.version}`)));
+  }
+  if (!rows.length) {
+    const filtered = filters.status || filters.type || filters.loc.trim();
+    list.append(h("div", { class: "empty" },
+      h("strong", {}, all.length ? "Nothing matches these filters" : "No reports yet"),
+      h("span", { class: "muted" }, all.length ? "Try a different status, type or location." : "When something breaks in your area, report it here and everyone sees it at once."),
+      filtered && all.length
+        ? h("button", { class: "btn", type: "button", onclick: () => { filters.status = filters.type = filters.loc = ""; $("fLoc").value = ""; render(); } }, "Clear filters")
+        : h("button", { class: "btn primary", type: "button", onclick: openSubmit }, icon("plus", 18, 2.4), "Report an issue")));
+  }
+}
+
+// ---- live activity --------------------------------------------------------
+function logEvent(ev, prev) {
+  const r = ev.report;
+  let what = "reported by";
+  if (ev.op !== "created")
+    what = prev && prev.status !== r.status ? ({ verified: "verified by", resolved: "resolved by", open: "reopened by" })[r.status]
+         : prev && prev.description !== r.description ? "description edited by" : "updated by";
+  const log = $("log");
+  log.prepend(h("div", { class: "act" }, h("span", { class: "t" }, new Date(r.updated_at * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })),
+    h("span", { class: "b" }, h("span", {}, h("span", { class: "id" }, r.id), ` ${what} ${r.updated_by}`),
+      h("span", { class: "mono muted", style: "font-size:12px" }, `seq ${ev.seq} · v${r.version} · via ${ev.served_by}`))));
+  while (log.children.length > 50) log.lastChild.remove();
+  $("logEmpty").hidden = true;
+}
+
+// ---- cluster card ---------------------------------------------------------
+async function pollHealth() {
+  await Promise.all(nodes.map(async n => {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 1500);
+    try { health[n.id] = await (await fetch(n.url + "/health", { signal: ctl.signal })).json(); }
+    catch (e) { health[n.id] = null; } finally { clearTimeout(timer); }
+  }));
+  renderCluster();
+}
+function renderCluster() {
+  const up = nodes.filter(n => health[n.id]), top = Math.max(0, ...up.map(n => health[n.id].last_seq));
+  const term = Math.max(0, ...up.map(n => health[n.id].term || 0));
+  const leader = up.find(n => health[n.id].role === "leader" && (health[n.id].term || 0) === term);
+  const box = $("nodes"); box.textContent = "";
+  for (const n of nodes) {
+    const hl = health[n.id], here = n === nodes[idx], isLeader = leader === n, lag = hl ? top - hl.last_seq : 0;
+    box.append(h("div", { class: "node" + (isLeader ? " leader" : "") + (here ? " here" : "") + (hl ? "" : " down") },
+      h("span", { class: "name" }, n.id),
+      h("span", { class: "role" }, (hl ? (isLeader ? "Leader" : "Follower") : "Down") + (here ? " · you" : "")),
+      h("span", { class: "seq" + (lag ? " lag" : "") }, hl ? `seq ${hl.last_seq}` + (lag ? ` (-${lag})` : "") : "no reply")));
+  }
+  $("term").textContent = term ? "term " + term : "";
+  const total = nodes.length, need = Math.floor(total / 2) + 1, down = nodes.filter(n => !health[n.id]).map(n => n.id);
+  $("clusterNote").textContent =
+    up.length < need ? `Only ${up.length} of ${total} nodes ${up.length === 1 ? "is" : "are"} up. Reports can be read but not changed until another node returns.`
+    : !leader ? "Choosing a new leader. Changes resume in a few seconds."
+    : down.length ? `${down.join(" and ")} is down. Everything keeps working on ${up.length} of ${total} nodes.`
+    : total === 1 ? "Single node. Start more nodes to survive a failure."
+    : `All ${total} nodes are up. A change is saved once ${need} of ${total} have it.`;
+}
+
+// ---- report detail drawer -------------------------------------------------
+async function openDrawer(id) {
+  openId = id; history = null; editing = false;
+  renderDrawer();
+  if (!$("dlgDrawer").open) $("dlgDrawer").showModal();
+  loadHistory();
+}
+async function loadHistory() {
+  const id = openId;
+  try {
+    const res = await api("GET", `/reports/${encodeURIComponent(id)}/history`);
+    if (openId === id && res.status === 200) { history = res.data; renderDrawer(); }
+  } catch (e) { /* the drawer still works without the history */ }
+}
+function describeChange(e, prev) {
+  if (e.op === "created" || !prev) return "reported this";
+  const parts = [];
+  if (prev.status !== e.report.status) parts.push(({ verified: "verified this report", resolved: "resolved this report", open: "reopened this report" })[e.report.status]);
+  if (prev.description !== e.report.description) parts.push("edited the description");
+  return parts.join(" and ") || "updated this report";
+}
+function renderDrawer() {
+  const r = reports.get(openId);
+  if (!r) return;
+  const head = $("drawerHead"), body = $("drawerBody"), mod = me.role === "moderator";
+  const keep = editing && $("editDesc") ? $("editDesc").value : null;   // a live event must not wipe a draft
+  head.textContent = ""; body.textContent = "";
+  head.style.paddingLeft = "24px";
+  head.append(h("span", { class: "tile", style: "width:36px;height:36px;border-radius:10px" }, icon(r.type, 20)),
+    h("span", { style: "flex:1;display:flex;flex-direction:column;min-width:0" },
+      h("span", { class: "mono small muted" }, `${r.id} · v${r.version}`),
+      h("span", { style: "font-weight:600" }, `${TYPES[r.type] || r.type} · ${r.location}`)),
+    h("button", { class: "iconbtn", type: "button", "aria-label": "Close", onclick: () => $("dlgDrawer").close() }, icon("close", 20, 2)));
+
+  const first = history && history[0] ? history[0].report : null;
+  body.append(h("div", { class: "stack" },
+    h("h1", { class: "d-title" }, r.description),
+    h("span", { class: "muted", style: "font-size:14px" },
+      (first ? `Reported by ${first.updated_by} at ${clock(first.updated_at)} · ` : "") + `last changed by ${r.updated_by} ${ago(r.updated_at)}`)));
+
+  const at = ORDER.indexOf(r.status), stepper = h("div", { class: "stepper" });
+  ORDER.forEach((s, i) => {
+    if (i) stepper.append(h("span", { class: "bar" + (i <= at ? " done" : "") }));
+    stepper.append(h("span", { class: "step" + (i < at ? " done" : i === at ? " now " + s : "") },
+      h("span", { class: "o" }, i <= at && icon("check", 12, 3)), STATUSES[s]));
+  });
+  body.append(stepper);
+
+  const actions = h("div", { class: "stack" });
+  if (editing) {
+    const ta = h("textarea", { id: "editDesc", class: "input", rows: "4", maxlength: "500", "aria-label": "Description" });
+    ta.value = keep != null ? keep : r.description;
+    actions.append(ta, h("div", { class: "two" },
+      h("button", { class: "btn", type: "button", disabled: busy, onclick: () => { editing = false; renderDrawer(); } }, "Cancel"),
+      h("button", { class: "btn primary", type: "button", disabled: busy, onclick: () => {
+        const text = ta.value.trim();
+        if (!text) return toast("The description cannot be empty.", "warn");
+        if (text === r.description) { editing = false; return renderDrawer(); }
+        update(r, { description: text });
+      } }, busy ? "Saving…" : "Save")));
+  } else {
+    const next = { open: ["verified", "Mark as verified"], verified: ["resolved", "Mark as resolved"] }[r.status];
+    if (mod && next) actions.append(h("button", { class: "btn primary big", type: "button", disabled: busy,
+      onclick: () => update(r, { status: next[0] }) }, busy ? "Saving…" : next[1]));
+    const second = [h("button", { class: "btn", type: "button", disabled: busy, onclick: () => { editing = true; renderDrawer(); $("editDesc").focus(); } }, "Edit description")];
+    if (mod && r.status === "open") second.push(h("button", { class: "btn", type: "button", disabled: busy, onclick: () => update(r, { status: "resolved" }) }, "Mark as resolved"));
+    if (mod && r.status !== "open") second.push(h("button", { class: "btn", type: "button", disabled: busy, onclick: () => update(r, { status: "open" }) }, "Reopen"));
+    actions.append(h("div", { class: second.length > 1 ? "two" : "stack" }, second));
+    actions.append(h("p", { class: "small muted" }, mod
+      ? `You are acting as a moderator. Your change applies to v${r.version}; if someone else edits first, you will see their version before anything is overwritten.`
+      : "Only moderators can verify or resolve a report. You can switch role from your name at the top."));
+  }
+  body.append(actions);
+
+  const hist = h("div", { class: "stack", style: "gap:14px" }, h("h2", {}, "History"));
+  if (!history) hist.append(h("span", { class: "small muted" }, "Loading…"));
+  else [...history].reverse().forEach((e, i, arr) => {
+    const prev = arr[i + 1] ? arr[i + 1].report : null;
+    hist.append(h("div", { class: "hist" }, h("span", { class: "v" }, "v" + e.report.version),
+      h("span", { class: "b" },
+        h("span", {}, h("strong", { style: "font-weight:600" }, e.report.updated_by), " " + describeChange(e, prev)),
+        prev && prev.description !== e.report.description && h("span", { class: "was" }, "Was: " + prev.description),
+        h("span", { class: "small muted" }, clock(e.report.updated_at) + " · ", h("span", { class: "mono", style: "font-size:12px" }, "seq " + e.seq)))));
+  });
+  body.append(hist);
+}
+
+// ---- writes ---------------------------------------------------------------
+function needName(then) {
+  if (me.name) return false;
+  openWho(then);
+  return true;
+}
+async function update(r, patch, baseVersion) {
+  if (needName(() => update(r, patch, baseVersion))) return;
+  const base = baseVersion || r.version;
+  busy = true; renderDrawer();
+  try {
+    const res = await api("PATCH", "/reports/" + encodeURIComponent(r.id),
+      Object.assign({ updated_by: me.name, role: me.role, base_version: base }, patch), () => toast(SWITCHING, "warn", true));
+    const cur = res.data.current;
+    // A retry after a failover can meet its own first attempt: the leader already applied it.
+    const mine = res.status === 409 && cur && cur.version === base + 1 && cur.updated_by === me.name
+      && Object.keys(patch).every(k => cur[k] === patch[k]);
+    if (res.status === 200 || mine) {
+      const saved = mine ? cur : res.data;
+      if (upsert(saved)) fresh.set(saved.id, Date.now());
+      editing = false;
+      toast(patch.status ? ({ verified: "Marked as verified", resolved: "Marked as resolved", open: "Reopened" })[patch.status] : "Description saved");
+    } else if (res.status === 409 && cur) {
+      upsert(cur);
+      const same = Object.keys(patch).every(k => cur[k] === patch[k]);
+      if (same) { editing = false; toast(`${cur.updated_by} already made the same change.`); }
+      else showConflict(cur, patch, base);
+    } else if (res.status === 404) toast("This report no longer exists.", "warn");
+    else toast(res.data.error ? "Could not save: " + res.data.error + "." : "Could not save. Try again.", "warn");
+  } catch (e) {
+    toast("No server could be reached, so nothing was saved. Check the connection and try again.", "warn");
+  }
+  busy = false; render(); renderDrawer(); loadHistory();
+}
+function showConflict(cur, patch, base) {
+  const body = $("conflictBody"); body.textContent = "";
+  const mineText = patch.description != null ? patch.description
+    : ({ verified: "Mark as verified", resolved: "Mark as resolved", open: "Reopen" })[patch.status];
+  const close = () => $("dlgConflict").close();
+  body.append(
+    h("div", { class: "stack", style: "gap:12px" }, h("span", { class: "c-icon" }, icon("swap", 24, 2)),
+      h("h1", { id: "hConflict", class: "d-title" }, "This report changed while you were editing"),
+      h("p", { style: "color:var(--ink-2)" }, `${cur.updated_by} updated ${cur.id} ${ago(cur.updated_at)}. Your edit was not saved, and nothing was overwritten.`)),
+    h("div", { class: "stack" },
+      h("div", { class: "c-card" }, h("div", { class: "h" }, h("span", {}, "Latest, by " + cur.updated_by),
+        h("span", { style: "display:flex;align-items:center;gap:8px" }, badge(cur.status), h("span", { class: "mono muted", style: "font-size:12px;font-weight:400" }, "v" + cur.version))),
+        h("span", {}, cur.description)),
+      h("div", { class: "c-card mine" }, h("div", { class: "h" }, h("span", {}, "Your unsaved edit"),
+        h("span", { class: "mono", style: "font-size:12px;font-weight:400" }, "based on v" + base)), h("span", {}, mineText))),
+    h("div", { class: "stack", style: "margin-top:auto" },
+      h("button", { class: "btn primary big", type: "button", onclick: () => { close(); update(cur, patch, cur.version); } }, "Apply my edit to the latest version"),
+      h("button", { class: "btn", type: "button", onclick: () => { close(); editing = false; renderDrawer(); } }, "Discard my edit"),
+      h("span", { class: "mono muted", style: "text-align:center;font-size:12px" }, `409 version conflict · sent base_version ${base} · current ${cur.version}`)));
+  $("dlgConflict").showModal();
+}
+
+// ---- submit dialog --------------------------------------------------------
+let pickedType = "", pendingId = null;
+function renderTiles() {
+  const box = $("typeTiles"); box.textContent = "";
+  for (const [val, label] of Object.entries(TYPES))
+    box.append(h("button", { type: "button", "aria-pressed": String(pickedType === val),
+      onclick: () => { pickedType = val; $("errType").hidden = true; renderTiles(); } }, icon(val), label));
+}
+function openSubmit() {
+  pickedType = ""; pendingId = uuid(); renderTiles();
+  $("inLoc").value = ""; $("inDesc").value = ""; $("inName").value = me.name; $("descCount").textContent = "0/500";
+  for (const id of ["errType", "errLoc", "errDesc", "errName", "submitNotice"]) $(id).hidden = true;
+  $("btnPost").disabled = false; $("btnPost").textContent = "Post report";
+  $("dlgSubmit").showModal();
+}
+async function submitReport(ev) {
+  ev.preventDefault();
+  const loc = $("inLoc").value.trim(), desc = $("inDesc").value.trim(), name = $("inName").value.trim();
+  $("errType").hidden = !!pickedType; $("errLoc").hidden = !!loc; $("errDesc").hidden = !!desc; $("errName").hidden = !!name;
+  if (!pickedType || !loc || !desc || !name) {
+    const bad = !pickedType ? $("typeTiles").querySelector("button") : !loc ? $("inLoc") : !desc ? $("inDesc") : $("inName");
+    return bad.focus();
+  }
+  me.name = name; saveMe();
+  const btn = $("btnPost"), notice = $("submitNotice");
+  btn.disabled = true; btn.textContent = "Posting report…";
+  try {
+    // The same request_id goes out on every retry, so a retried submit cannot create a duplicate.
+    const res = await api("POST", "/reports", { type: pickedType, location: loc, description: desc, updated_by: name, request_id: pendingId },
+      () => { notice.textContent = ""; notice.append(icon("clock", 18, 2), h("span", {}, "The network is switching servers. Your report will post by itself in a few seconds.")); notice.hidden = false; });
+    if (res.status === 201 || res.status === 200) {
+      if (upsert(res.data)) fresh.set(res.data.id, Date.now());
+      $("dlgSubmit").close(); render(); toast("Report posted. Everyone can see it now.");
+      return;
+    }
+    notice.textContent = ""; notice.append(h("span", {}, "Could not post: " + (res.data.error || "the server refused it") + ".")); notice.hidden = false;
+  } catch (e) {
+    notice.textContent = ""; notice.append(h("span", {}, "No server could be reached. Your text is still here: check the connection and try again.")); notice.hidden = false;
+  }
+  btn.disabled = false; btn.textContent = "Post report";
+}
+
+// ---- name and role dialog -------------------------------------------------
+let draftRole = "resident", afterWho = null;
+function renderRole() {
+  const seg = $("roleSeg"); seg.textContent = "";
+  for (const [val, label] of [["resident", "Resident"], ["moderator", "Moderator"]])
+    seg.append(h("button", { type: "button", style: "flex:1;min-height:44px", "aria-pressed": String(draftRole === val),
+      onclick: () => { draftRole = val; renderRole(); } }, label));
+}
+function openWho(then) {
+  afterWho = typeof then === "function" ? then : null;
+  draftRole = me.role; renderRole(); $("whoIn").value = me.name; $("errWho").hidden = true;
+  $("dlgWho").showModal();
+}
+function saveWho(ev) {
+  ev.preventDefault();
+  const name = $("whoIn").value.trim();
+  if (!name) { $("errWho").hidden = false; return $("whoIn").focus(); }
+  me = { name, role: draftRole }; saveMe();
+  $("dlgWho").close(); renderDrawer();
+  if (afterWho) { const f = afterWho; afterWho = null; f(); }
+}
+
+// ---- live feed with failover ----------------------------------------------
+async function loadSnapshot(base) {
+  try {
+    const list = await (await fetch(base + "/reports")).json();
+    list.forEach(upsert); render(); renderDrawer();
+  } catch (e) { /* the stream will tell us if the node is really gone */ }
+}
+function connect() {
+  const n = nodes[idx];
+  let opened = 0, replayed = 0;
+  es = new EventSource(n.url + "/events" + (lastId !== null ? "?last_id=" + lastId : ""));
+  es.onopen = () => {
+    failures = 0; opened = Date.now(); setLive(true); renderCluster(); loadSnapshot(n.url);
+    if (lostFrom && lostFrom !== n.id) { const from = lostFrom; setTimeout(() => showBanner(n.id, from, replayed), 900); }
+    lostFrom = null;
+  };
+  es.addEventListener("report", m => {
+    lastId = Number(m.lastEventId);
+    if (Date.now() - opened < 900) replayed++;          // events replayed from the WAL right after a reconnect
+    const ev = JSON.parse(m.data), prev = reports.get(ev.report.id);
+    if (upsert(ev.report)) {
+      fresh.set(ev.report.id, Date.now()); render();
+      setTimeout(render, 8100);                          // drop the "Just updated" tag again
+      if (ev.report.id === openId) { renderDrawer(); loadHistory(); }
+    }
+    logEvent(ev, prev && prev.version < ev.report.version ? prev : null);
+  });
+  es.onerror = () => {                                   // node died / stream ended: fail over to the next node
+    es.close(); failures++;
+    if (!lostFrom) lostFrom = n.id;
+    setLive(false);
+    idx = (idx + 1) % nodes.length;
+    setTimeout(connect, Math.min(2000, 250 * 2 ** Math.min(failures, 3)));
+  };
+}
+
+// ---- boot -----------------------------------------------------------------
+async function boot() {
+  for (const b of [$("btnReport"), $("btnReportM")]) { b.append(icon("plus", 18, 2.4), "Report an issue"); b.onclick = openSubmit; }
+  $("searchIcon").append(icon("search", 16, 2));
+  document.querySelectorAll("[data-close]").forEach(b => { b.append(icon("close", 20, 2)); b.onclick = () => b.closest("dialog").close(); });
+  document.querySelectorAll("dialog").forEach(d => d.addEventListener("click", e => { if (e.target === d) d.close(); }));  // click on the backdrop
+  $("dlgDrawer").addEventListener("close", () => { openId = null; editing = false; });
+  $("btnWho").onclick = () => openWho();
+  $("formWho").onsubmit = saveWho;
+  $("formSubmit").onsubmit = submitReport;
+  $("inDesc").oninput = () => { $("descCount").textContent = $("inDesc").value.length + "/500"; };
+  $("fLoc").oninput = () => { filters.loc = $("fLoc").value; render(); };
+  renderWho(); render();
+  try {                                                  // learn all node addresses from the node that served this page
+    const j = await (await fetch("/nodes")).json();
+    const all = Object.entries(j.nodes).sort().map(([id, addr]) => ({ id, url: "http://" + addr }));
+    let here = all.findIndex(n => n.url === location.origin);
+    if (here < 0) here = all.findIndex(n => new URL(n.url).port === location.port);   // opened as "localhost"
+    if (all.length) { nodes = all; idx = Math.max(0, here); }
+  } catch (e) { /* single-node fallback: location.origin */ }
+  connect();
+  pollHealth(); setInterval(pollHealth, 2000);
+  setInterval(() => { render(); if (openId && !editing) renderDrawer(); }, 30000);   // keep "5 min ago" honest
+}
+boot();
+</script>
+</body>
+</html>

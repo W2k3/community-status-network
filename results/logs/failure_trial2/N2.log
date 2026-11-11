@@ -1,0 +1,5 @@
+[N2] listening on 127.0.0.1:59001; replayed WAL up to seq 0
+[N2] leader is now N1 (term 1)
+[N2] caught up: applied 1 entries, now at seq 443
+[N2] leader N1 silent for 3s -> I am the lowest live ID; catching up before taking over
+[N2] leader is now N2 (term 2)  <-- I AM THE LEADER

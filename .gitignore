@@ -1,0 +1,6 @@
+*.pyc
+.venv*/
+__pycache__/
+data/
+data/*.wal
+results/tmp/

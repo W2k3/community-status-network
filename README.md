@@ -121,6 +121,7 @@ python3 -m csn.server --id N3
 (`"N1": "192.168.1.10:8001"`, ...), copy the project to each laptop, and run
 `python3 -m csn.server --id N<k>` on laptop *k*. Nodes bind to the address in the config.
 Optional keys: `"heartbeat_interval"` (default 1.0 s) and `"dead_after"` (default 3.0 s).
+For a complete step-by-step setup, firewall rules, and a walkthrough demonstration script, see [**`docs/MULTI_PC_SETUP.md`**](docs/MULTI_PC_SETUP.md).
 
 ### Command-line client
 
@@ -327,4 +328,5 @@ demo.py          one-command demo      run_tests.py   test runner + log
 tests/           unit and integration tests (stages 1-6)
 bench/           load test, failure test, charts       results/   evidence
 docs/REPORT_OUTLINE.md   skeleton and split of work for the written report and video
+docs/MULTI_PC_SETUP.md   step-by-step guide for deploying and demonstrating across 3 PCs
 ```
